@@ -1,6 +1,6 @@
-from os import getenv
-import sys
 import time
+from os import getenv
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -10,7 +10,6 @@ from postgres import Postgres
 from plemmy import LemmyHttp
 from plemmy.responses import (
     ListRegistrationApplicationsResponse,
-    RegistrationApplicationView,
 )
 
 db = Postgres(url=getenv("DATABASE_URL"))
@@ -42,11 +41,11 @@ def main():
                 try:
                     if registration.admin is not None:
                         continue
-                    email = registration.creator_local_user.email
-                    domain = email.split("@")[1]
+                    email_to_check = registration.creator_local_user.email
+                    domain = email_to_check.split("@")[1]
                     user = registration.creator
                     if domain.strip() in disposable_emails:
-                        print(f"User {user.name} got blocked for using a disposable email address ({email})")
+                        print(f"User {user.name} got blocked for using a disposable email address ({email_to_check})")
                         if getenv("DENY_TRASH_MAILS") == "true":
                             lemmy.approve_registration_application(false, registration.id, "Disposable Email")
                         if webhook:
