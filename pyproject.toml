@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "lemmy-email-check"
+version = "0.1.0"
+description = ""
+authors = [""]
+readme = "README.md"
+packages = [{include = "lemmy_email_check"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+slack-sdk = "*"
+python-dotenv = "*"
+plemmy = "*"
+requests = "*"
+postgres = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

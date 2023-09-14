@@ -19,7 +19,7 @@ lemmy.login(getenv("LEMMY_USERNAME"), getenv("LEMMY_PASSWORD"))
 
 disposable_emails = []
 
-with open("emailchecker/disposable.list", "r") as file:
+with open("./disposable.list", "r") as file:
     for email in file.read().splitlines():
         if email.strip() != "" and not email.strip() in disposable_emails:
             disposable_emails.append(email.strip())
