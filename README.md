@@ -2,16 +2,20 @@
 
 This script checks for disposable emails in registrations. 
 
-# How to prepare
-
-Install dependencies with pip install -r requirements.txt
-
-1. Check emai.list and add / remove unwanted lists
-2. Add manual domain blocklists to manual_blocklist.list
-3. Run "python emailchecker/fetchList.py" ( it can take a while! )
+# Setup
+```bash
+pip install . --upgradepip install . --upgrade
+```
 
 # How to let the checker run
+1. Copy emai.list to run dir
+   1. Add / remove unwanted lists
+2. Copy manual_blocklist.list to run dir
+   1. Add manual domain blocklists to manual_blocklist.list
+3. Rename .env_example to .env
+4. Put your fitting values into it.
+5. Run 
 
-1. Rename .env_example to .env
-2. Put your fitting values into it.
-3. Run "python emailchecker/main.py"
+```bash
+lemmyemailchecker
+```
