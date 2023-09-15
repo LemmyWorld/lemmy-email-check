@@ -45,12 +45,14 @@ class Main:
                         user = registration.creator
                         if domain.strip() in Main.disposable_emails:
                             print(
-                                f"User {user.name} got blocked for using a disposable email address ({email_to_check})")
+                                f"User {user.name} got blocked for using a disposable email address ({email_to_check})"
+                            )
                             if getenv("DENY_TRASH_MAILS") == "true":
                                 Main.lemmy.approve_registration_application(False, registration.id, "Disposable Email")
                             if Main.webhook:
                                 Main.webhook.send(
-                                    text=f"User {user.name} got blocked for using a disposable email address")
+                                    text=f"User {user.name} got blocked for using a disposable email address"
+                                )
                         else:
                             Main.lemmy.approve_registration_application(True, registration.id, "Not a disposable email")
                             if Main.webhook:
@@ -69,5 +71,6 @@ class Main:
 
 if __name__ == "__main__":
     from emailchecker import fetchLists
+
     fetchLists.run()
     Main.main()
