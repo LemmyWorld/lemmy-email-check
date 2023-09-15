@@ -16,7 +16,7 @@ tasks:
         cmds:
             - poetry install
             - task: security
-#            - task: pytest
+            #- task: pytest #TODO Add unit test?
     commit:
         # Run all actions at same time
         deps:
