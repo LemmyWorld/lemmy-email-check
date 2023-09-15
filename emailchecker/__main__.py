@@ -2,12 +2,12 @@ import time
 from os import getenv
 
 from dotenv import load_dotenv
-
-load_dotenv()
 from plemmy import LemmyHttp
 from plemmy.responses import ListRegistrationApplicationsResponse
 from postgres import Postgres
 from slack_sdk.webhook import WebhookClient
+
+load_dotenv()
 
 
 class Main:

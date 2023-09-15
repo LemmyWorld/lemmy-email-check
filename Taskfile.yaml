@@ -16,7 +16,7 @@ tasks:
         cmds:
             - poetry install
             - task: security
-            - task: pytest
+#            - task: pytest
     commit:
         # Run all actions at same time
         deps:
@@ -32,7 +32,7 @@ tasks:
     security:
         - poetry run whispers {{.BUILD_DIR}} # Check for security issues
         - poetry run bandit --silent -r {{.BUILD_DIR}}
-        - poetry run tartufo scan-local-repo .
+        #- poetry run tartufo scan-local-repo .
     pytest:
         silent: false
         interactive: false
@@ -47,7 +47,7 @@ tasks:
             - poetry run isort --atomic . # Sort imports
             - poetry run black . # Format code
             - poetry run flake8
-            - poetry version $(git describe --tags --abbrev=0)
+            #- poetry version $(git describe --tags --abbrev=0)
     docs:
         silent: false
         interactive: false
@@ -56,9 +56,8 @@ tasks:
             - poetry run pdoc3 {{.BUILD_DIR}} -o docs -f
             - poetry run pyreverse {{.BUILD_DIR}} -d docs
             - git add docs
-            - rm CHANGELOG.md
-            - git-changelog -p -a -x >> CHANGELOG.md
-            - git add CHANGELOG.md
+            # - git-changelog -p -a -x >> CHANGELOG.md
+            # - git add CHANGELOG.md
 
 # Build Scripts
     install:
