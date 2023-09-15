@@ -1,0 +1,7 @@
+version: '3.7'
+services:
+  app:
+    env_file: .env
+    image: change_me
+    entrypoint: [ "python3", "emailchecker/__main__.py" ]
+

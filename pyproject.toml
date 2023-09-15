@@ -68,7 +68,7 @@ exclude-entropy-patterns = [
     {path-pattern = 'mapping\.cfg', pattern = '.'}, # Git secret
 ]
 
-[tool.poetry.group.dev.dependencies]
+[tool.poetry.group.test.dependencies]
 setuptools = "*"
 pytest = "*"
 pytest-cov = "*"
