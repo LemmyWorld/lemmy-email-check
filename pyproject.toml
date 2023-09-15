@@ -65,7 +65,8 @@ exclude-path-patterns = [
     # To not have to escape `\` in regexes, use single quoted
     # TOML 'literal strings'
     {path-pattern = 'docs/source/(.*)\.rst'},
-    {path-pattern = 'env\.example'},
+    {path-pattern = '.env\.example'},
+    {path-pattern = '.env\_example'},
 
 ]
 exclude-entropy-patterns = [
@@ -74,7 +75,7 @@ exclude-entropy-patterns = [
     {path-pattern = 'Pipfile\.lock', pattern = '.'},
     {path-pattern = 'README\.md', pattern = '.'},
     {path-pattern = 'mapping\.cfg', pattern = '.'}, # Git secret
-    {path-pattern = 'env\.example',pattern = '.'},
+    {path-pattern = '.env\.example',pattern = '.'},
 ]
 
 [tool.poetry.group.test.dependencies]
