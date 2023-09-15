@@ -1,0 +1,81 @@
+version: '3'
+vars:
+    BUILD_DIR: emailchecker
+tasks:
+    default:
+        - task: test
+        - task: commit
+    setup:
+        - python3 -m pip install pipx
+        - python3 -m pipx ensurepath
+        - pipx install poetry
+        - poetry install
+    test:
+        silent: false
+        interactive: false
+        cmds:
+            - poetry install
+            - task: security
+            - task: pytest
+    commit:
+        # Run all actions at same time
+        deps:
+            -   task: format
+            -   task: security
+            -   task: docs
+    clean:
+        - rm -rf dist
+        - poetry cache clear _default_cache --all  --no-interaction
+        - poetry cache clear PyPI --all  --no-interaction
+        - poetry check
+        - py3clean .
+    security:
+        - poetry run whispers {{.BUILD_DIR}} # Check for security issues
+        - poetry run bandit --silent -r {{.BUILD_DIR}}
+        - poetry run tartufo scan-local-repo .
+    pytest:
+        silent: false
+        interactive: false
+        dotenv: [.env]
+        cmds:
+            - poetry run vulture --min-confidence 100 {{.BUILD_DIR}}
+            - poetry run pytest --cov --cov-fail-under=75 #--typeguard-packages={{.BUILD_DIR}} # Leave typeguard off for now
+    format:
+        silent: false
+        interactive: false
+        cmds:
+            - poetry run isort --atomic . # Sort imports
+            - poetry run black . # Format code
+            - poetry run flake8
+            - poetry version $(git describe --tags --abbrev=0)
+    docs:
+        silent: false
+        interactive: false
+        cmds:
+            - rm -rf docsprod
+            - poetry run pdoc3 {{.BUILD_DIR}} -o docs -f
+            - poetry run pyreverse {{.BUILD_DIR}} -d docs
+            - git add docs
+            - rm CHANGELOG.md
+            - git-changelog -p -a -x >> CHANGELOG.md
+            - git add CHANGELOG.md
+
+# Build Scripts
+    install:
+      - pip install . --upgrade
+    build:
+      - poetry version $(git describe --tags --abbrev=0)
+      - git-changelog -p -a -x >> CHANGELOG.md
+      - git add CHANGELOG.md
+      - docker-compose build --no-cache --pull --progress=plain
+
+    publish:
+        -   task: security
+        -   task: build
+        - poetry publish
+    build_poetry:
+        env:
+            PIPENV_IGNORE_VIRTUALENVS: 1
+        deps: [ docs, clean ]
+        cmds:
+            - poetry build

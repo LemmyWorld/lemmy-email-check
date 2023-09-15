@@ -4,13 +4,10 @@ from os import getenv
 from dotenv import load_dotenv
 
 load_dotenv()
-from slack_sdk.webhook import WebhookClient
-from postgres import Postgres
-
 from plemmy import LemmyHttp
-from plemmy.responses import (
-    ListRegistrationApplicationsResponse,
-)
+from plemmy.responses import ListRegistrationApplicationsResponse
+from postgres import Postgres
+from slack_sdk.webhook import WebhookClient
 
 db = Postgres(url=getenv("DATABASE_URL"))
 
