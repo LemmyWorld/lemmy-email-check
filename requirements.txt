@@ -1,5 +1,0 @@
-slack-sdk
-python-dotenv
-plemmy
-requests
-postgres
