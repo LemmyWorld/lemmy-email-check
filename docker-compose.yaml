@@ -2,6 +2,6 @@ version: '3.7'
 services:
   app:
     env_file: .env
-    image: ghcr.io/lemmyworld/lemmy-email-check:latest
+    image: ghcr.io/lemmyworld/lemmy-email-check:main
     entrypoint: [ "python3", "emailchecker/__main__.py" ]
 
