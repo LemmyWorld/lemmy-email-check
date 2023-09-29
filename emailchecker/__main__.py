@@ -32,14 +32,12 @@ def main():
         print("Checking for new registrations")
         try:
             new_registrations = lemmy.list_registration_applications()
-            registrations: ListRegistrationApplicationsResponse = ListRegistrationApplicationsResponse(
-                new_registrations
-            )
-            for registration in registrations.registration_applications:
+            registrations = new_registrations.json()
+            for registration in registrations["registration_applications"]:
                 try:
-                    if registration.admin is not None:
+                    if registration["admin"] is not None:
                         continue
-                    email_to_check = registration.creator_local_user.email
+                    email_to_check = registration["creator_local_user"]["email"]
                     domain = email_to_check.split("@")[1]
                     user = registration.creator
                     if domain.strip() in disposable_emails:
