@@ -37,7 +37,6 @@ def main():
             registrations = new_registrations.json()
             for registration in registrations["registration_applications"]:
                 try:
-                    print(registration)
                     if "admin" in registration:
                         continue
                     email_to_check = registration["creator_local_user"]["email"]
