@@ -24,7 +24,7 @@ if getenv("SLACK_WEBHOOK_URL") != "":
 
 
 def main():
-    with open("./disposable.list", "r") as file:
+    with open("./email-check/disposable.list", "r") as file:
         for email in file.read().splitlines():
             if email.strip() != "" and not email.strip() in disposable_emails:
                 disposable_emails.append(email.strip())
