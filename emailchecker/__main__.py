@@ -41,17 +41,17 @@ def main():
                         continue
                     email_to_check = registration["creator_local_user"]["email"]
                     domain = email_to_check.split("@")[1]
-                    user = registration.creator
+                    user = registration["creator"]
                     if domain.strip() in disposable_emails:
-                        print(f"User {user.name} got blocked for using a disposable email address ({email_to_check})")
+                        print(f"User {user['name']} got blocked for using a disposable email address ({email_to_check})")
                         if getenv("DENY_TRASH_MAILS") == "true":
-                            lemmy.approve_registration_application(False, registration.id, "Disposable Email")
+                            lemmy.approve_registration_application(False, registration["id"], "Disposable Email")
                         if webhook:
                             webhook.send(text=f"User {user.name} got blocked for using a disposable email address")
                     else:
-                        lemmy.approve_registration_application(True, registration.id, "Not a disposable email")
+                        lemmy.approve_registration_application(True, registration["id"], "Not a disposable email")
                         if webhook:
-                            webhook.send(text=f"User {user.name} got approved.")
+                            webhook.send(text=f"User {user['name']} got approved.")
 
                 except Exception as e:
                     print("Error while checking for one registration")
