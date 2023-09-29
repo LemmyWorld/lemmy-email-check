@@ -24,10 +24,12 @@ if getenv("SLACK_WEBHOOK_URL") != "":
 
 
 def main():
+    print("Preparing emails....")
     with open("./emailchecker/disposable.list", "r") as file:
         for email in file.read().splitlines():
             if email.strip() != "" and not email.strip() in disposable_emails:
                 disposable_emails.append(email.strip())
+    print("Done preparing emails")
     while True:
         print("Checking for new registrations")
         try:
@@ -35,7 +37,7 @@ def main():
             registrations = new_registrations.json()
             for registration in registrations["registration_applications"]:
                 try:
-                    if registration["admin"] is not None:
+                    if "admin" in registrations:
                         continue
                     email_to_check = registration["creator_local_user"]["email"]
                     domain = email_to_check.split("@")[1]
