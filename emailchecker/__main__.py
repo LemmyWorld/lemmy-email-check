@@ -45,11 +45,11 @@ def main():
                     if domain.strip() in disposable_emails:
                         print(f"User {user['name']} got blocked for using a disposable email address ({email_to_check})")
                         if getenv("DENY_TRASH_MAILS") == "true":
-                            lemmy.approve_registration_application(False, registration["registration_application"]["id"], "Disposable Email")
+                            lemmy.approve_registration_application(False, registration["registration_application"]["id"])
                         if webhook:
                             webhook.send(text=f"User {user.name} got blocked for using a disposable email address")
                     else:
-                        lemmy.approve_registration_application(True, registration["registration_application"]["id"], "Not a disposable email")
+                        lemmy.approve_registration_application(True, registration["registration_application"]["id"])
                         if webhook:
                             webhook.send(text=f"User {user['name']} got approved.")
 
