@@ -42,6 +42,7 @@ def main():
                     email_to_check = registration["creator_local_user"]["email"]
                     domain = email_to_check.split("@")[1]
                     user = registration["creator"]
+                    print("Checking " + domain)
                     if domain.strip() in disposable_emails:
                         print(f"User {user['name']} got blocked for using a disposable email address ({email_to_check})")
                         if getenv("DENY_TRASH_MAILS") == "true":
