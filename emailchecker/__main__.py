@@ -1,5 +1,6 @@
 import time
 from os import getenv
+from typing import List
 
 from dotenv import load_dotenv
 
@@ -24,20 +25,24 @@ if getenv("SLACK_WEBHOOK_URL") != "":
 def check_answer(answer: str | None) -> bool:
     return answer is not None and answer.strip().upper() == "I AGREE"
 
+
 def fetch_registrations():
     registrations = []
     for i in range(1, 5):
-        registrations.append(lemmy.list_registration_applications(page=i, unread_only=True).json())
+        print("Fetching page " + str(i))
+        registration = lemmy.list_registration_applications(page=i, unread_only="true")
+        print(registration.text)
+        registrations.append(registration.json())
         time.sleep(2)
 
     return registrations
 
+
 def main():
+    global disposable_emails
     print("Preparing emails....")
     with open("./emailchecker/disposable.list", "r") as file:
-        for email in file.read().splitlines():
-            if email.strip() != "" and not email.strip() in disposable_emails:
-                disposable_emails.append(email.strip())
+        disposable_emails = file.read().splitlines()
     print("Done preparing emails")
     while True:
         print("Checking for new registrations")

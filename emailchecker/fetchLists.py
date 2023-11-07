@@ -15,7 +15,6 @@ def run():
         r = requests.get(url, timeout=120)
         for email in r.text.splitlines():
             if email.strip() != "" and not email.strip() in disposable_emails:
-                print("Adding " + email.strip())  # FIXME change this to a debug logging statement
                 disposable_emails.append(email.strip())
         print("Done Fetching")
 
