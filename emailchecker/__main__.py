@@ -31,7 +31,6 @@ def fetch_registrations():
     for i in range(1, 5):
         print("Fetching page " + str(i))
         registration = lemmy.list_registration_applications(page=i, unread_only="true")
-        print(registration.text)
         registrations.append(registration.json())
         time.sleep(2)
 
