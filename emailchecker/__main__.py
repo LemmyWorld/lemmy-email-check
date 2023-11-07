@@ -6,10 +6,9 @@ from dotenv import load_dotenv
 from slack_sdk.webhook import WebhookClient
 
 from plemmy import LemmyHttp
-from plemmy.responses import (
-    ListRegistrationApplicationsResponse,
-)
+
 from emailchecker import fetchLists
+
 load_dotenv()
 
 lemmy = LemmyHttp(getenv("LEMMY_URL"))
@@ -17,10 +16,13 @@ lemmy.login(getenv("LEMMY_USERNAME"), getenv("LEMMY_PASSWORD"))
 
 disposable_emails = []
 
-
 webhook = False
 if getenv("SLACK_WEBHOOK_URL") != "":
     webhook = WebhookClient(getenv("SLACK_WEBHOOK_URL"))
+
+
+def check_answer(answer: str | None) -> bool:
+    return answer is not None and answer.strip().upper() == "I AGREE"
 
 
 def main():
@@ -40,13 +42,26 @@ def main():
                     if "admin" in registration:
                         continue
                     email_to_check = registration["creator_local_user"]["email"]
-                    domain = email_to_check.split("@")[1]
+                    domain: str = email_to_check.split("@")[1]
                     user = registration["creator"]
+
+                    if not check_answer(registration["registration_application"]["answer"]):
+                        lemmy.approve_registration_application(False,
+                                                               registration["registration_application"]["id"])
+
+                        lemmy.purge_person(user["id"], "Did not agree to the terms of service.")
+                        if webhook:
+                            webhook.send(
+                                text=f"User {user['name']} got blocked for not agreeing to the terms of service.")
+                        continue
+
                     print("Checking " + domain)
                     if domain.strip() in disposable_emails:
-                        print(f"User {user['name']} got blocked for using a disposable email address ({email_to_check})")
+                        print(
+                            f"User {user['name']} got blocked for using a disposable email address ({email_to_check})")
                         if getenv("DENY_TRASH_MAILS") == "true":
-                            lemmy.approve_registration_application(False, registration["registration_application"]["id"])
+                            lemmy.approve_registration_application(False,
+                                                                   registration["registration_application"]["id"])
                         if webhook:
                             webhook.send(text=f"User {user.name} got blocked for using a disposable email address")
                     else:
