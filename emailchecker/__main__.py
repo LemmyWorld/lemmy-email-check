@@ -24,6 +24,13 @@ if getenv("SLACK_WEBHOOK_URL") != "":
 def check_answer(answer: str | None) -> bool:
     return answer is not None and answer.strip().upper() == "I AGREE"
 
+def fetch_registrations():
+    registrations = []
+    for i in range(1, 5):
+        registrations.append(lemmy.list_registration_applications(page=i, unread_only=True).json())
+        time.sleep(2)
+
+    return registrations
 
 def main():
     print("Preparing emails....")
@@ -35,8 +42,7 @@ def main():
     while True:
         print("Checking for new registrations")
         try:
-            new_registrations = lemmy.list_registration_applications()
-            registrations = new_registrations.json()
+            registrations = fetch_registrations()
             for registration in registrations["registration_applications"]:
                 try:
                     if "admin" in registration:
