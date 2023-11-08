@@ -47,8 +47,9 @@ def main():
         print("Checking for new registrations")
         try:
             registrations = fetch_registrations()
-            for registration in registrations["registration_applications"]:
+            for registration_data in registrations:
                 try:
+                    registration = registration_data["registration_applications"]
                     if "admin" in registration:
                         continue
                     email_to_check = registration["creator_local_user"]["email"]
