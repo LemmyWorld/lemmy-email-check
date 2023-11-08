@@ -28,10 +28,10 @@ def check_answer(answer: str | None) -> bool:
 
 def fetch_registrations():
     registrations = []
-    for i in range(1, 5):
+    for i in range(5):
         print("Fetching page " + str(i))
         registration = lemmy.list_registration_applications(page=i, unread_only="true")
-        registrations.append(registration.json())
+        registrations = registrations + registration.json()["registration_applications"]
         time.sleep(2)
 
     return registrations
@@ -47,9 +47,8 @@ def main():
         print("Checking for new registrations")
         try:
             registrations = fetch_registrations()
-            for registration_data in registrations:
+            for registration in registrations:
                 try:
-                    registration = registration_data["registration_applications"]
                     if "admin" in registration:
                         continue
                     email_to_check = registration["creator_local_user"]["email"]
