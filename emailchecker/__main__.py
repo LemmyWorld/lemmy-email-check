@@ -54,6 +54,10 @@ def main():
                     email_to_check = registration["creator_local_user"]["email"]
                     domain: str = email_to_check.split("@")[1]
                     user = registration["creator"]
+                    local_user = registration["creator_local_user"]
+
+                    if local_user is not None and local_user["email_verified"] is False:
+                        continue
 
                     if not check_answer(registration["registration_application"]["answer"]):
                         lemmy.approve_registration_application(False,
