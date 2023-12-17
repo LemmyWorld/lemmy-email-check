@@ -8,6 +8,8 @@ from slack_sdk.webhook import WebhookClient
 
 from lemmylib.lib import LemmyLib
 
+from plemmy import LemmyHttp
+
 from emailchecker import fetchLists
 
 load_dotenv()
@@ -100,7 +102,9 @@ def main():
 
 def run():
     fetchLists.run()
-    main()
+    # main()
+    print(lemmy.get_post(47))
+
 
 if __name__ == "__main__":
     run()
