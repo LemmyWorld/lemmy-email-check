@@ -701,7 +701,7 @@ files = [
 
 [[package]]
 name = "lemmylib"
-version = "0.0.2a"
+version = "0.0.3"
 description = ""
 optional = false
 python-versions = "^3.10"
@@ -714,8 +714,8 @@ requests = "^2.31.0"
 [package.source]
 type = "git"
 url = "https://github.com/LemmyWorld/lemmy-lib.git"
-reference = "HEAD"
-resolved_reference = "074340bba637442e621ffdf93c6f63df0dce0d64"
+reference = "v0.0.3"
+resolved_reference = "43667dfc51009b2f0e28568a5872988d6c3a076a"
 
 [[package]]
 name = "luhn"
@@ -1845,4 +1845,4 @@ requests = ">=2.0,<3.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "74b060edb0f3e35acdd3bf826f09d883e6706e67d7d072c488ff23069ba28b17"
+content-hash = "60d9e4c552e0039a532092c73c91d8c84a0bd4ed2218b2639a5dbf23a06a40fd"

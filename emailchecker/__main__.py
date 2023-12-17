@@ -6,13 +6,13 @@ from dotenv import load_dotenv
 
 from slack_sdk.webhook import WebhookClient
 
-from plemmy import LemmyHttp
+from lemmylib.lib import LemmyLib
 
 from emailchecker import fetchLists
 
 load_dotenv()
 
-lemmy = LemmyHttp(getenv("LEMMY_URL"))
+lemmy = LemmyLib(getenv("LEMMY_URL"))
 lemmy.login(getenv("LEMMY_USERNAME"), getenv("LEMMY_PASSWORD"))
 
 disposable_emails = []
@@ -31,7 +31,9 @@ def fetch_registrations():
     for i in range(1, 5):
         print("Fetching page " + str(i))
         registration = lemmy.list_registration_applications(page=i, unread_only=True)
+        print(registration)
         registrations = registrations + registration.json()["registration_applications"]
+        print(registrations)
         time.sleep(2)
 
     return registrations
@@ -49,12 +51,14 @@ def main():
             registrations = fetch_registrations()
             for registration in registrations:
                 try:
-                    if "admin" in registration:
-                        continue
-                    email_to_check = registration["creator_local_user"]["email"]
+                    # if "admin" in registration or registration["creator_local_user"] is None or "email" not in registration["creator_local_user"]:
+                    #     continue
+                    local_user = registration["creator_local_user"]
+
+                    email_to_check = registration["creator_local_user"]["email"] if registration[
+                        "creator_local_user"] is not None and "email" in registration["creator_local_user"] else "test@gmx.net"
                     domain: str = email_to_check.split("@")[1]
                     user = registration["creator"]
-                    local_user = registration["creator_local_user"]
 
                     if local_user is not None and local_user["email_verified"] is False:
                         continue
