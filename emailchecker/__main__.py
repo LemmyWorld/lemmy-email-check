@@ -30,7 +30,7 @@ def fetch_registrations():
     registrations = []
     for i in range(1, 5):
         print("Fetching page " + str(i))
-        registration = lemmy.list_registration_applications(page=i, unread_only="true")
+        registration = lemmy.list_registration_applications(page=i, unread_only=True)
         registrations = registrations + registration.json()["registration_applications"]
         time.sleep(2)
 
@@ -79,7 +79,7 @@ def main():
                             lemmy.purge_person(user["id"], "Used a trash mail.")
 
                         if webhook:
-                            webhook.send(text=f"User {user.name} got blocked for using a disposable email address")
+                            webhook.send(text=f"User {user['name']} got blocked for using a disposable email address")
                     else:
                         lemmy.approve_registration_application(True, registration["registration_application"]["id"])
                         if webhook:
