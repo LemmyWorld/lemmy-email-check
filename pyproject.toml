@@ -13,7 +13,7 @@ python-dotenv = "*"
 plemmy = "*"
 requests = "*"
 postgres = "*"
-lemmylib = {git = "https://github.com/LemmyWorld/lemmy-lib.git", rev = "v0.0.3"}
+lemmylib = {git = "https://github.com/LemmyWorld/lemmy-lib.git", rev = "v0.0.4"}
 
 [tool.poetry.scripts]
 lemmyemailchecker = "emailchecker.__main__:run"
