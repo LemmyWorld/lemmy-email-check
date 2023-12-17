@@ -31,9 +31,7 @@ def fetch_registrations():
     for i in range(1, 5):
         print("Fetching page " + str(i))
         registration = lemmy.list_registration_applications(page=i, unread_only=True)
-        print(registration)
         registrations = registrations + registration.json()["registration_applications"]
-        print(registrations)
         time.sleep(2)
 
     return registrations
