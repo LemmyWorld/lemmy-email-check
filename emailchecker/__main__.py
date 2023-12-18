@@ -102,8 +102,7 @@ def main():
 
 def run():
     fetchLists.run()
-    # main()
-    print(lemmy.get_post(47))
+    main()
 
 
 if __name__ == "__main__":
