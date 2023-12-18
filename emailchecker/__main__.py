@@ -8,8 +8,6 @@ from slack_sdk.webhook import WebhookClient
 
 from lemmylib.lib import LemmyLib
 
-from plemmy import LemmyHttp
-
 from emailchecker import fetchLists
 
 load_dotenv()
@@ -34,7 +32,6 @@ def fetch_registrations():
         print("Fetching page " + str(i))
         registration = lemmy.list_registration_applications(page=i, unread_only=True)
         registrations = registrations + registration.json()["registration_applications"]
-        time.sleep(2)
 
     return registrations
 
@@ -49,14 +46,18 @@ def main():
         print("Checking for new registrations")
         try:
             registrations = fetch_registrations()
+            print("Found " + str(len(registrations)) + " registrations"
+                  )
             for registration in registrations:
                 try:
-                    # if "admin" in registration or registration["creator_local_user"] is None or "email" not in registration["creator_local_user"]:
-                    #     continue
+                    if "admin" in registration or registration["creator_local_user"] is None or "email" not in registration["creator_local_user"]:
+                        continue
                     local_user = registration["creator_local_user"]
 
                     email_to_check = registration["creator_local_user"]["email"] if registration[
-                        "creator_local_user"] is not None and "email" in registration["creator_local_user"] else "test@gmx.net"
+                                                                                        "creator_local_user"] is not None and "email" in \
+                                                                                    registration[
+                                                                                        "creator_local_user"] else "test@gmx.net"
                     domain: str = email_to_check.split("@")[1]
                     user = registration["creator"]
 
@@ -64,8 +65,8 @@ def main():
                         continue
 
                     if not check_answer(registration["registration_application"]["answer"]):
-                        lemmy.approve_registration_application(False,
-                                                               registration["registration_application"]["id"])
+                        lemmy.approve_registration_application(registration["registration_application"]["id"],
+                                                               approve=False)
 
                         lemmy.purge_person(user["id"], "Did not agree to the terms of service.")
                         if webhook:
@@ -78,14 +79,14 @@ def main():
                         print(
                             f"User {user['name']} got blocked for using a disposable email address ({email_to_check})")
                         if getenv("DENY_TRASH_MAILS") == "true":
-                            lemmy.approve_registration_application(False,
-                                                                   registration["registration_application"]["id"])
+                            lemmy.approve_registration_application(registration["registration_application"]["id"],
+                                                                   False)
                             lemmy.purge_person(user["id"], "Used a trash mail.")
 
                         if webhook:
                             webhook.send(text=f"User {user['name']} got blocked for using a disposable email address")
                     else:
-                        lemmy.approve_registration_application(True, registration["registration_application"]["id"])
+                        lemmy.approve_registration_application(registration["registration_application"]["id"], True)
                         if webhook:
                             webhook.send(text=f"User {user['name']} got approved.")
 
